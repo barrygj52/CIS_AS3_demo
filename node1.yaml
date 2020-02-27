@@ -1,0 +1,20 @@
+apiVersion: projectcalico.org/v3
+kind: Node
+metadata:
+  annotations:
+    projectcalico.org/kube-labels: '{"beta.kubernetes.io/arch":"amd64","beta.kubernetes.io/os":"linux","kubernetes.io/hostname":"node1"}'
+  creationTimestamp: 2019-04-26T14:02:27Z
+  labels:
+    beta.kubernetes.io/arch: amd64
+    beta.kubernetes.io/os: linux
+    kubernetes.io/hostname: node1
+  name: node1
+  resourceVersion: "457720"
+  uid: ec8dd2d4-682b-11e9-8f11-06ee660206ac
+spec:
+  bgp:
+    ipv4Address: 10.1.10.110/24
+    ipv4IPIPTunnelAddr: 192.168.166.131
+  orchRefs:
+  - nodeName: node1
+    orchestrator: k8s

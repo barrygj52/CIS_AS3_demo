@@ -1,0 +1,74 @@
+{
+    "$schema": "https://raw.githubusercontent.com/F5Networks/f5-appsvcs-extension/master/schema/latest/as3-schema.json",
+    "class": "AS3",
+    "declaration": {
+        "class": "ADC",
+        "schemaVersion": "3.6.0",
+        "id": "f5-hello-world-as3",
+        "label": "CIS AS3 Example",
+        "remark": "Example of using CIS",
+        "AS3": {
+            "class": "Tenant",
+            "MyApps": {
+                "class": "Application",
+                "template": "generic",
+                "www_kubedemo_com": {
+                    "class": "GSLB_Domain",
+                    "domainName": "www.kubedemo.com",
+                    "resourceRecordType": "A",
+                    "pools": [
+                        {
+                            "use": "kubedns_pool"
+                        }
+                    ]
+                },
+                "PODServer1": {
+                    "class": "GSLB_Server",
+                    "dataCenter": {
+                        "use": "/Common/Shared/kubernetes_pod_network_01"
+                    },
+                    "devices": [
+                        {
+                            "address": "10.1.10.50"
+                        }
+                    ],
+                    "virtualServerDiscoveryMode": "enabled",
+                    "exposeRouteDomainsEnabled": true,
+                    "virtualServers": [
+                        {
+                          "address": "10.1.10.180",
+                          "port": 80
+                        }]
+                },
+                "kubedns_pool": {
+                    "class": "GSLB_Pool",
+                    "members": [
+                        {
+                            "ratio": 10,
+                            "server": {
+                                "use": "PODServer1"
+                            },
+                            "virtualServer": "0"
+                        }
+                    ],
+                    "monitors": [
+                        {
+                            "bigip": "/Common/bigip"
+                        }
+                    ],
+                    "resourceRecordType": "A"
+                }
+            }
+        },
+        "Common": {
+            "class": "Tenant",
+            "Shared": {
+                "class": "Application",
+                "template": "shared",
+                "kubernetes_pod_network_01": {
+                    "class": "GSLB_Data_Center"
+                }
+            }
+        }
+    }
+}

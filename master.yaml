@@ -1,0 +1,21 @@
+apiVersion: projectcalico.org/v3
+kind: Node
+metadata:
+  annotations:
+    projectcalico.org/kube-labels: '{"beta.kubernetes.io/arch":"amd64","beta.kubernetes.io/os":"linux","kubernetes.io/hostname":"master","node-role.kubernetes.io/master":""}'
+  creationTimestamp: 2019-04-26T13:54:56Z
+  labels:
+    beta.kubernetes.io/arch: amd64
+    beta.kubernetes.io/os: linux
+    kubernetes.io/hostname: master
+    node-role.kubernetes.io/master: ""
+  name: master
+  resourceVersion: "457753"
+  uid: dfbdba13-682a-11e9-a8c5-0630df1c6ea6
+spec:
+  bgp:
+    ipv4Address: 10.1.10.100/24
+    ipv4IPIPTunnelAddr: 192.168.219.67
+  orchRefs:
+  - nodeName: master
+    orchestrator: k8s

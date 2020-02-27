@@ -1,0 +1,97 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: f5-helloworld-as3-configmap1
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: |
+    {
+    "class": "AS3",
+    "declaration": {
+      "class": "ADC",
+      "schemaVersion": "3.1.0",
+      "id": "f5-hello-world-1",
+      "label": "CIS AS3 Example",
+      "remark": "Example of using CIS",
+      "AS3": {
+        "class": "Tenant",
+        "MyApps": {
+           "class": "Application",
+           "template": "generic",
+           "f5_hello_world_as3": {
+              "class": "Service_TCP",
+              "virtualAddresses": ["10.1.10.180"],
+              "remark":"ingress: f5demo.tcp.v1",
+              "virtualPort": 80,
+              "pool": "hello_demopool1"
+           },
+           "hello_demopool1": {
+              "class": "Pool",
+              "monitors": [ "tcp" ],
+              "members": [{
+                 "servicePort": 8080,
+                 "serverAddresses": []
+              }]
+           },
+                "testDomain": {
+                    "class": "GSLB_Domain",
+                    "domainName": "www.kubedemo.com",
+                    "resourceRecordType": "A",
+                    "pools": [
+                        {
+                            "use": "kubedns_pool"
+                        }
+                    ]
+                },
+                "kubedns_pool": {
+                    "class": "GSLB_Pool",
+                    "members": [
+                        {
+                            "ratio": 10,
+                            "server": {
+                                "use": "/Common/Shared/AS3server"
+                            },
+                            "virtualServer": "0"
+                        }
+                    ],
+                    "monitors": [
+                        {
+                            "bigip": "/Common/bigip"
+                        }
+                    ],
+                    "resourceRecordType": "A"
+                }
+            }
+        },
+        "Common": {
+            "class": "Tenant",
+            "Shared": {
+                "class": "Application",
+                "template": "shared",
+                "AS3kubeDataCenter": {
+                    "class": "GSLB_Data_Center"
+                },
+                "AS3server": {
+                    "class": "GSLB_Server",
+                    "dataCenter": {
+                        "use": "AS3kubeDataCenter"
+                    },
+                    "devices": [
+                        {
+                            "address": "10.1.10.10"
+                        }
+                    ],
+                    "virtualServerDiscoveryMode": "enabled",
+                    "exposeRouteDomainsEnabled": true,
+                    "virtualServers": [
+                        {
+                          "address": "10.1.10.180",
+                          "port": 80
+                        }]
+                }
+        }
+      }
+    }
+    }

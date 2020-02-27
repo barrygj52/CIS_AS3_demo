@@ -1,0 +1,40 @@
+{
+    "class": "ADC",
+    "schemaVersion": "3.6.0",
+    "id": "f5demo",
+    "CIS_AS3_Example": {
+        "class": "Tenant",
+        "Application": {
+            "class": "Application",
+            "template": "generic",
+            "testDomain": {
+                "class": "GSLB_Domain",
+                "domainName": "www.kubedemo.com",
+                "resourceRecordType": "A",
+                "pools": [
+                    {
+                        "use": "kubedns_pool"
+                    }
+                ]
+            },
+            "kubedns_pool": {
+                "class": "GSLB_Pool",
+                "members": [
+                    {
+                        "ratio": 10,
+                        "server": {
+                            "use": "/Common/shared/AS3server"
+                        },
+                        "virtualServer": "0"
+                    }
+                ],
+                "monitors": [
+                    {
+                        "bigip": "/Common/http"
+                    }
+                ],
+                "resourceRecordType": "A"
+            }
+        }
+    }
+}

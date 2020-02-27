@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: f5-hello-world-2
+  namespace: kubeflannel
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: f5-hello-world-2
+    spec:
+      containers:
+      - name: f5-hello-world-2
+        image: "f5devcentral/f5-hello-world:latest"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          protocol: TCP
